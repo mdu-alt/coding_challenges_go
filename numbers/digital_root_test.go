@@ -7,12 +7,10 @@ import (
 )
 
 func TestDigitalRoot(t *testing.T) {
-	type testCase struct {
+	testMatrix := map[string][]struct {
 		n        int
 		expected int
-	}
-
-	testMatrix := map[string][]testCase{
+	}{
 		"valid": {
 			{0, 0},
 			{5, 5},
@@ -29,11 +27,11 @@ func TestDigitalRoot(t *testing.T) {
 
 	for name, tests := range testMatrix {
 		for _, test := range tests {
-			testname := fmt.Sprintf("%v--{%v,%v}", name, test.n, test.expected)
+			testname := fmt.Sprintf("%s--{%d,%d}", name, test.n, test.expected)
 
 			t.Run(testname, func(t *testing.T) {
 				if got := digitalRoot(test.n); got != test.expected {
-					t.Errorf("expected: %v, got: %v", test.expected, got)
+					t.Errorf("expected: %d, got: %d", test.expected, got)
 				}
 			})
 		}

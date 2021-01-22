@@ -6,7 +6,7 @@ import (
 )
 
 func TestBinarySearch(t *testing.T) {
-	testCases := map[string][]struct {
+	testMatrix := map[string][]struct {
 		s        []int
 		e        int
 		expected int
@@ -24,13 +24,13 @@ func TestBinarySearch(t *testing.T) {
 		},
 	}
 
-	for name, tC := range testCases {
-		for _, test := range tC {
-			testname := fmt.Sprintf("%v--{%v,%v,%v}", name, test.s, test.e, test.expected)
+	for name, tests := range testMatrix {
+		for _, test := range tests {
+			testname := fmt.Sprintf("%s--{%d,%d,%d}", name, test.s, test.e, test.expected)
 
 			t.Run(testname, func(t *testing.T) {
 				if got := binarySearch(test.s, test.e); got != test.expected {
-					t.Errorf("expected: %v, got: %v", test.expected, got)
+					t.Errorf("expected: %d, got: %d", test.expected, got)
 				}
 			})
 		}

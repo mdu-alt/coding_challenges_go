@@ -7,18 +7,16 @@ import (
 )
 
 func TestRomanToDecimal(t *testing.T) {
-	type testCase struct {
+	testMatrix := map[string][]struct {
 		roman    string
 		expected int
-	}
-
-	testMatrix := map[string][]testCase{
-		"valid": {
+	}{
+		"singleSymbols": {
 			{"I", 1},
 			{"X", 10},
 			{"D", 500},
 		},
-		"many_symbols": {
+		"manySymbols": {
 			{"VI", 6},
 			{"XXII", 22},
 			{"MCLXVII", 1167},
@@ -40,11 +38,11 @@ func TestRomanToDecimal(t *testing.T) {
 
 	for name, tests := range testMatrix {
 		for _, test := range tests {
-			testname := fmt.Sprintf("%v--{%v,%v}", name, test.roman, test.expected)
+			testname := fmt.Sprintf("%s--{%s,%d}", name, test.roman, test.expected)
 
 			t.Run(testname, func(t *testing.T) {
 				if got := romanToDecimal(test.roman); got != test.expected {
-					t.Errorf("expected: %v, got: %v", test.expected, got)
+					t.Errorf("expected: %d, got: %d", test.expected, got)
 				}
 			})
 		}
@@ -52,12 +50,10 @@ func TestRomanToDecimal(t *testing.T) {
 }
 
 func TestDecimalToRoman(t *testing.T) {
-	type testCase struct {
+	testMatrix := map[string][]struct {
 		decimal  int
 		expected string
-	}
-
-	testMatrix := map[string][]testCase{
+	}{
 		"valid": {
 			{1, "I"},
 			{45, "XLV"},
@@ -67,7 +63,6 @@ func TestDecimalToRoman(t *testing.T) {
 		},
 		"invalid": {
 			{math.MinInt32, ""},
-			{-1, ""},
 			{0, ""},
 			{4000, ""},
 			{math.MaxInt32, ""},
@@ -76,11 +71,11 @@ func TestDecimalToRoman(t *testing.T) {
 
 	for name, tests := range testMatrix {
 		for _, test := range tests {
-			testname := fmt.Sprintf("%v--{%v,%v}", name, test.decimal, test.expected)
+			testname := fmt.Sprintf("%s--{%d,%s}", name, test.decimal, test.expected)
 
 			t.Run(testname, func(t *testing.T) {
 				if got := decimalToRoman(test.decimal); got != test.expected {
-					t.Errorf("expected: %v, got: %v", test.expected, got)
+					t.Errorf("expected: %s, got: %s", test.expected, got)
 				}
 			})
 		}

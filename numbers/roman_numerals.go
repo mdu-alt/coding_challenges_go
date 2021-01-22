@@ -34,16 +34,6 @@ var map2decimal = map[int]int{
 	symbolI: 1,
 }
 
-// var toto = map[int][]int]{
-// 	symbolM: 1000,
-// 	symbolD: 500,
-// 	symbolC: 100,
-// 	symbolL: 50,
-// 	symbolX: 10,
-// 	symbolV: 5,
-// 	symbolI: 1,
-// }
-
 func romanToDecimal(roman string) int {
 	var (
 		accu      []int

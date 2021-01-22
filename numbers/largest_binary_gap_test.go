@@ -7,13 +7,11 @@ import (
 )
 
 func TestLargestBinaryGap(t *testing.T) {
-	type testCase struct {
+	testMatrix := map[string][]struct {
 		n        int
 		expected int
-	}
-
-	testMatrix := map[string][]testCase{
-		"any_gaps": {
+	}{
+		"anyGaps": {
 			{5, 1},          //          5 = 0b101
 			{9, 2},          //          9 = 0b1001
 			{17, 3},         //         17 = 0b10001
@@ -21,7 +19,7 @@ func TestLargestBinaryGap(t *testing.T) {
 			{2546, 2},       //       2546 = 0b100111110010
 			{1376796946, 5}, // 1376796946 = 0b1010010000100000100000100010010
 		},
-		"no_gaps": {
+		"noGaps": {
 			{1, 0},  //  1 = 0b1
 			{3, 0},  //  3 = 0b11
 			{7, 0},  //  7 = 0b111
@@ -41,11 +39,11 @@ func TestLargestBinaryGap(t *testing.T) {
 
 	for name, tests := range testMatrix {
 		for _, test := range tests {
-			testname := fmt.Sprintf("%v--{%v,%v}", name, test.n, test.expected)
+			testname := fmt.Sprintf("%s--{%d,%d}", name, test.n, test.expected)
 
 			t.Run(testname, func(t *testing.T) {
 				if got := largestBinaryGap(test.n); got != test.expected {
-					t.Errorf("expected: %v, got: %v", test.expected, got)
+					t.Errorf("expected: %d, got: %d", test.expected, got)
 				}
 			})
 		}
