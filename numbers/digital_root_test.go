@@ -1,37 +1,43 @@
-package numbers
+package numbers_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
+
+	"github.com/mdu-alt/coding_challenges_go/numbers"
 )
+
+func ExampleDigitalRoot() {
+	// 789 -> 7+8+9 == 24 -> 2+4 == 6
+	fmt.Println(numbers.DigitalRoot(789))
+	// Output: 6
+}
 
 func TestDigitalRoot(t *testing.T) {
 	testMatrix := map[string][]struct {
-		n        int
-		expected int
+		n    int
+		want int
 	}{
-		"valid": {
+		"positive": {
 			{0, 0},
 			{5, 5},
-			{39, 3},
-			{871, 7},
 			{5642, 8},
 			{123456789, 9},
 		},
-		"invalid": {
+		"negative": {
 			{-1, -1},
 			{math.MinInt32, -1},
 		},
 	}
 
-	for name, tests := range testMatrix {
-		for _, test := range tests {
-			testname := fmt.Sprintf("%s--{%d,%d}", name, test.n, test.expected)
+	for title, testCases := range testMatrix {
+		for _, test := range testCases {
+			name := fmt.Sprintf("%s{%d|%d}", title, test.n, test.want)
 
-			t.Run(testname, func(t *testing.T) {
-				if got := digitalRoot(test.n); got != test.expected {
-					t.Errorf("expected: %d, got: %d", test.expected, got)
+			t.Run(name, func(t *testing.T) {
+				if got := numbers.DigitalRoot(test.n); got != test.want {
+					t.Errorf("expected: %d, got: %d", test.want, got)
 				}
 			})
 		}

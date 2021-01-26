@@ -1,6 +1,8 @@
 package numbers
 
-func digitalRoot(n int) int {
+// DigitalRoot repeatedly sums all digits of a positive integer n until a
+// single digit remains. It returns -1 if n is negative.
+func DigitalRoot(n int) int {
 	if n < 0 {
 		return -1
 	}

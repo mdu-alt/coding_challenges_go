@@ -1,8 +1,11 @@
 package numbers
 
-import "math"
-
-func largestBinaryGap(n int) int {
+// LargestBinaryGap finds the length of the largest binary gap of a positive
+// integer. It returns -1 if n is negative.
+//
+// A binary gap of a positive integer n is any maximal sequence of consecutive
+// zeros that is surrounded by ones in the binary representation of n.
+func LargestBinaryGap(n int) int {
 	if n < 0 {
 		return -1
 	}
@@ -17,7 +20,7 @@ func largestBinaryGap(n int) int {
 			accu++
 		} else if n&1 == 1 {
 			hasBit1 = true
-			gap = int(math.Max(float64(accu), float64(gap)))
+			gap = max(gap, accu)
 			accu = 0
 		}
 
@@ -25,4 +28,11 @@ func largestBinaryGap(n int) int {
 	}
 
 	return gap
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

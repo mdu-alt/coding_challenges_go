@@ -1,40 +1,44 @@
 package numbers
 
-import (
-	"strings"
-)
+import "strings"
 
-const (
-	symbolI = 1 << iota // 1
-	symbolV             // 5
-	symbolX             // 10
-	symbolL             // 50
-	symbolC             // 100
-	symbolD             // 500
-	symbolM             // 1000
-)
+// RomanToDecimal converts a string of roman numerals to a decimal number.
+//
+// It returns -1 in case of an invalid input, such as:
+//  - invalid symbols (e.g. 'A', '3', '$')
+//  - too many symbols in a row (e.g. "IIII", "VV")
+//  - invalid subtract cases (e.g. "IIX", "IXI", "VL")
+func RomanToDecimal(roman string) int {
+	const (
+		I = 1 << iota // 1
+		V             // 5
+		X             // 10
+		L             // 50
+		C             // 100
+		D             // 500
+		M             // 1000
+	)
 
-var map2bit = map[byte]int{
-	'M': symbolM,
-	'D': symbolD,
-	'C': symbolC,
-	'L': symbolL,
-	'X': symbolX,
-	'V': symbolV,
-	'I': symbolI,
-}
+	map2bit := map[byte]int{
+		'I': I,
+		'V': V,
+		'X': X,
+		'L': L,
+		'C': C,
+		'D': D,
+		'M': M,
+	}
 
-var map2decimal = map[int]int{
-	symbolM: 1000,
-	symbolD: 500,
-	symbolC: 100,
-	symbolL: 50,
-	symbolX: 10,
-	symbolV: 5,
-	symbolI: 1,
-}
+	map2decimal := map[int]int{
+		I: 1,
+		V: 5,
+		X: 10,
+		L: 50,
+		C: 100,
+		D: 500,
+		M: 1000,
+	}
 
-func romanToDecimal(roman string) int {
 	var (
 		accu      []int
 		decimal   int
@@ -42,30 +46,28 @@ func romanToDecimal(roman string) int {
 	)
 
 	for i := len(roman) - 1; i >= 0; i-- {
-		curr := map2bit[roman[i]]
+		curr, ok := map2bit[roman[i]]
 
-		// Invalid cases: "IIX", "IXI"
-		if curr == 0 || curr < min {
+		// Invalid cases: "A3$" / "IIX" / "IXI"
+		if !ok || curr < min {
 			return -1
 		}
 
+		// Invalid case: "IIII"
 		if len(accu) > 0 && accu[len(accu)-1] == curr {
-			accu = append(accu, curr)
-
-			// Invalid case: "IIII"
-			if len(accu) > 3 {
+			if accu = append(accu, curr); len(accu) > 3 {
 				return -1
 			}
 		} else {
 			accu = []int{curr}
 		}
 
-		// Invalid cases: "VV", "LL", "DD"
-		if curr&prev&(symbolV|symbolL|symbolD) != 0 {
+		// Invalid cases: "VV" / "LL" / "DD"
+		if curr&prev&(V|L|D) != 0 {
 			return -1
 		}
 
-		if curr&(symbolI|symbolX|symbolC) != 0 && curr < prev && prev <= (curr<<2) {
+		if curr&(I|X|C) != 0 && curr < prev && prev <= (curr<<2) {
 			// Case: "IV"
 			decimal -= map2decimal[curr]
 			min = prev
@@ -77,7 +79,7 @@ func romanToDecimal(roman string) int {
 				min = curr
 			}
 		} else {
-			// Invalid cases: "VX", "IL"
+			// Invalid cases: "VX" / "IL"
 			return -1
 		}
 
@@ -87,12 +89,14 @@ func romanToDecimal(roman string) int {
 	return decimal
 }
 
-func decimalToRoman(decimal int) string {
+// DecimalToRoman converts a decimal number to a string of roman numerals.
+// It returns an empty string if decimal is out of the range [1..3999].
+func DecimalToRoman(decimal int) string {
 	if decimal < 1 || decimal > 3999 {
 		return ""
 	}
 
-	symbols := []string{"I", "V", "X", "L", "C", "D", "M"}
+	symbols := strings.Split("IVXLCDM", "")
 
 	var (
 		offset int
@@ -120,7 +124,7 @@ func decimalToRoman(decimal int) string {
 		offset += 2
 	}
 
-	roman := []rune(b.String())
+	roman := []byte(b.String())
 
 	for i, j := 0, len(roman)-1; i < j; i, j = i+1, j-1 {
 		roman[i], roman[j] = roman[j], roman[i]

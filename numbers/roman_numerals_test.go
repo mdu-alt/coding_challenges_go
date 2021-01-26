@@ -1,22 +1,29 @@
-package numbers
+package numbers_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
+
+	"github.com/mdu-alt/coding_challenges_go/numbers"
 )
+
+func ExampleRomanToDecimal() {
+	fmt.Println(numbers.RomanToDecimal("XLII"))
+	// Output: 42
+}
 
 func TestRomanToDecimal(t *testing.T) {
 	testMatrix := map[string][]struct {
-		roman    string
-		expected int
+		roman string
+		want  int
 	}{
-		"singleSymbols": {
+		"single symbol": {
 			{"I", 1},
 			{"X", 10},
 			{"D", 500},
 		},
-		"manySymbols": {
+		"many symbols": {
 			{"VI", 6},
 			{"XXII", 22},
 			{"MCLXVII", 1167},
@@ -36,28 +43,32 @@ func TestRomanToDecimal(t *testing.T) {
 		},
 	}
 
-	for name, tests := range testMatrix {
-		for _, test := range tests {
-			testname := fmt.Sprintf("%s--{%s,%d}", name, test.roman, test.expected)
+	for title, testCases := range testMatrix {
+		for _, test := range testCases {
+			name := fmt.Sprintf("%s{%q|%d}", title, test.roman, test.want)
 
-			t.Run(testname, func(t *testing.T) {
-				if got := romanToDecimal(test.roman); got != test.expected {
-					t.Errorf("expected: %d, got: %d", test.expected, got)
+			t.Run(name, func(t *testing.T) {
+				if got := numbers.RomanToDecimal(test.roman); got != test.want {
+					t.Errorf("expected: %d, got: %d", test.want, got)
 				}
 			})
 		}
 	}
 }
 
+func ExampleDecimalToRoman() {
+	fmt.Println(numbers.DecimalToRoman(42))
+	// Output: XLII
+}
+
 func TestDecimalToRoman(t *testing.T) {
 	testMatrix := map[string][]struct {
-		decimal  int
-		expected string
+		decimal int
+		want    string
 	}{
 		"valid": {
 			{1, "I"},
-			{45, "XLV"},
-			{679, "DCLXXIX"},
+			{2489, "MMCDLXXXIX"},
 			{3888, "MMMDCCCLXXXVIII"},
 			{3999, "MMMCMXCIX"},
 		},
@@ -69,13 +80,13 @@ func TestDecimalToRoman(t *testing.T) {
 		},
 	}
 
-	for name, tests := range testMatrix {
-		for _, test := range tests {
-			testname := fmt.Sprintf("%s--{%d,%s}", name, test.decimal, test.expected)
+	for title, testCases := range testMatrix {
+		for _, test := range testCases {
+			name := fmt.Sprintf("%s{%d|%q}", title, test.decimal, test.want)
 
-			t.Run(testname, func(t *testing.T) {
-				if got := decimalToRoman(test.decimal); got != test.expected {
-					t.Errorf("expected: %s, got: %s", test.expected, got)
+			t.Run(name, func(t *testing.T) {
+				if got := numbers.DecimalToRoman(test.decimal); got != test.want {
+					t.Errorf("expected: %s, got: %s", test.want, got)
 				}
 			})
 		}
