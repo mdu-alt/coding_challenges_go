@@ -2,9 +2,8 @@ package numbers
 
 import "strings"
 
-// RomanToDecimal converts a string of roman numerals to a decimal number.
-//
-// It returns -1 in case of an invalid input, such as:
+// RomanToDecimal converts a string of roman numerals to a decimal number. It
+// returns -1 in case the input contains:
 //  - invalid symbols (e.g. 'A', '3', '$')
 //  - too many symbols in a row (e.g. "IIII", "VV")
 //  - invalid subtract cases (e.g. "IIX", "IXI", "VL")
@@ -19,7 +18,7 @@ func RomanToDecimal(roman string) int {
 		M             // 1000
 	)
 
-	map2bit := map[byte]int{
+	toBit := map[rune]int{
 		'I': I,
 		'V': V,
 		'X': X,
@@ -29,7 +28,7 @@ func RomanToDecimal(roman string) int {
 		'M': M,
 	}
 
-	map2decimal := map[int]int{
+	toDecimal := map[int]int{
 		I: 1,
 		V: 5,
 		X: 10,
@@ -40,47 +39,45 @@ func RomanToDecimal(roman string) int {
 	}
 
 	var (
-		accu      []int
-		decimal   int
-		prev, min int
+		max           int = M << 1
+		prev          int = M
+		decimal, accu int
 	)
 
-	for i := len(roman) - 1; i >= 0; i-- {
-		curr, ok := map2bit[roman[i]]
+	for _, c := range roman {
+		curr, ok := toBit[c]
 
-		// Invalid cases: "A3$" / "IIX" / "IXI"
-		if !ok || curr < min {
+		// Invalid cases: "A" / "3" / "$" / "VV" / "VIV" / "IXI" / "CMC"
+		if !ok || curr >= max {
 			return -1
 		}
 
-		// Invalid case: "IIII"
-		if len(accu) > 0 && accu[len(accu)-1] == curr {
-			if accu = append(accu, curr); len(accu) > 3 {
+		// Invalid cases: "IIX" / "CCM"
+		if accu == 2 && curr > prev {
+			return -1
+		}
+
+		// Invalid cases: "IIII" / "CCCC"
+		if curr == prev {
+			if accu++; accu > 3 {
 				return -1
 			}
 		} else {
-			accu = []int{curr}
+			accu = 1
 		}
 
-		// Invalid cases: "VV" / "LL" / "DD"
-		if curr&prev&(V|L|D) != 0 {
-			return -1
-		}
+		if prev&(I|X|C) != 0 && curr > prev && curr <= (prev<<2) {
+			// Cases: "IV" / "CM"
+			decimal += toDecimal[curr] - 2*toDecimal[prev]
 
-		if curr&(I|X|C) != 0 && curr < prev && prev <= (curr<<2) {
-			// Case: "IV"
-			decimal -= map2decimal[curr]
-			min = prev
-		} else if curr >= prev {
-			// Case: "VI"
-			decimal += map2decimal[curr]
-
-			if prev != 0 {
-				min = curr
-			}
+			max = prev
 		} else {
-			// Invalid cases: "VX" / "IL"
-			return -1
+			// Case: "VI" / "CL"
+			decimal += toDecimal[curr]
+
+			if curr&(V|L|D) != 0 {
+				max = curr
+			}
 		}
 
 		prev = curr
@@ -89,8 +86,8 @@ func RomanToDecimal(roman string) int {
 	return decimal
 }
 
-// DecimalToRoman converts a decimal number to a string of roman numerals.
-// It returns an empty string if decimal is out of the range [1..3999].
+// DecimalToRoman converts a decimal number to a string of roman numerals. It
+// returns an empty string if decimal is out of the range [1..3999].
 func DecimalToRoman(decimal int) string {
 	if decimal < 1 || decimal > 3999 {
 		return ""

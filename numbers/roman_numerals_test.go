@@ -20,17 +20,20 @@ func TestRomanToDecimal(t *testing.T) {
 	}{
 		"single symbol": {
 			{"I", 1},
-			{"X", 10},
+			{"V", 5},
 			{"D", 500},
+			{"M", 1000},
 		},
 		"many symbols": {
-			{"VI", 6},
+			{"VIII", 8},
 			{"XXII", 22},
+			{"DCLVI", 656},
 			{"MCLXVII", 1167},
 		},
 		"subtract": {
 			{"IV", 4},
 			{"XIX", 19},
+			{"XLII", 42},
 			{"MMCM", 2900},
 		},
 		"invalid": {
@@ -40,6 +43,7 @@ func TestRomanToDecimal(t *testing.T) {
 			{"IIX", -1},
 			{"IXI", -1},
 			{"VX", -1},
+			{"VIV", -1},
 		},
 	}
 
@@ -68,6 +72,8 @@ func TestDecimalToRoman(t *testing.T) {
 	}{
 		"valid": {
 			{1, "I"},
+			{176, "CLXXVI"},
+			{345, "CCCXLV"},
 			{2489, "MMCDLXXXIX"},
 			{3888, "MMMDCCCLXXXVIII"},
 			{3999, "MMMCMXCIX"},
