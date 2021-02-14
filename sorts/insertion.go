@@ -6,13 +6,12 @@ func Insertion(slice []int) {
 		x := slice[i]
 		j := i - 1
 
-		// shift elements to the right...
 		for j >= 0 && slice[j] > x {
-			slice[j+1] = slice[j]
 			j--
 		}
 
-		// ...then assign x in-place
+		// Shift elements to the right, then assign x in-place.
+		copy(slice[j+2:i+1], slice[j+1:i])
 		slice[j+1] = x
 	}
 }

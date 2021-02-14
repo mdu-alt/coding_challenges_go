@@ -3,16 +3,14 @@ package sorts
 // Selection sorts a slice of integers using selection sort algorithm.
 func Selection(slice []int) {
 	for i := range slice {
-		j := i
+		m := i
 
-		for k := range slice[i+1:] {
-			if slice[k+i+1] < slice[j] {
-				j = k + i + 1
+		for j := i + 1; j < len(slice); j++ {
+			if slice[j] < slice[m] {
+				m = j
 			}
 		}
 
-		if i != j {
-			slice[i], slice[j] = slice[j], slice[i]
-		}
+		slice[i], slice[m] = slice[m], slice[i]
 	}
 }
