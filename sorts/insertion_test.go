@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/mdu-alt/coding_challenges_go/sorts"
+	"github.com/mdu-alt/coding_challenges_go/sorts/sortstest"
 )
 
 func TestInsertion(t *testing.T) {
@@ -15,12 +16,15 @@ func TestInsertion(t *testing.T) {
 		want  []int
 	}{
 		"empty": {
-			{slice0, make([]int, len(slice0))},
+			{sortstest.S0(), make([]int, len(sortstest.S0()))},
 		},
 		"any": {
-			{slice10, make([]int, len(slice10))},
-			{slice50, make([]int, len(slice50))},
-			{slice100, make([]int, len(slice100))},
+			{sortstest.S1(), make([]int, len(sortstest.S1()))},
+			{sortstest.S2(), make([]int, len(sortstest.S2()))},
+			{sortstest.S3(), make([]int, len(sortstest.S3()))},
+			{sortstest.S10(), make([]int, len(sortstest.S10()))},
+			{sortstest.S20(), make([]int, len(sortstest.S20()))},
+			{sortstest.S30(), make([]int, len(sortstest.S30()))},
 		},
 	}
 
