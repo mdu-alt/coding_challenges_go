@@ -6,20 +6,28 @@ func Quick(slice []int) {
 		return
 	}
 
-	i, j := 0, len(slice)-1
-	pivot := slice[len(slice)/2]
+	// Hoare partition scheme.
+	i, j := -1, len(slice)
+	pivot := slice[(len(slice)-1)/2]
 
-	for i < j {
+	for {
+		i++
 		for slice[i] < pivot {
 			i++
 		}
+
+		j--
 		for slice[j] > pivot {
 			j--
+		}
+
+		if i >= j {
+			break
 		}
 
 		slice[i], slice[j] = slice[j], slice[i]
 	}
 
-	Quick(slice[:i])
-	Quick(slice[i+1:])
+	Quick(slice[:j+1])
+	Quick(slice[j+1:])
 }

@@ -2,44 +2,50 @@ package sorts_test
 
 import (
 	"fmt"
-	"reflect"
 	"sort"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/mdu-alt/coding_challenges_go/sorts"
 	"github.com/mdu-alt/coding_challenges_go/sorts/sortstest"
 )
 
 func TestQuick(t *testing.T) {
-	testMatrix := map[string][]struct {
-		slice []int
-		want  []int
-	}{
-		"empty": {
-			{sortstest.S0(), make([]int, len(sortstest.S0()))},
-		},
-		"any": {
-			{sortstest.S1(), make([]int, len(sortstest.S1()))},
-			{sortstest.S2(), make([]int, len(sortstest.S2()))},
-			{sortstest.S3(), make([]int, len(sortstest.S3()))},
-			{sortstest.S10(), make([]int, len(sortstest.S10()))},
-			{sortstest.S20(), make([]int, len(sortstest.S20()))},
-			{sortstest.S30(), make([]int, len(sortstest.S30()))},
-		},
+	testCases := [][]int{
+		// empty
+		sortstest.Slice0,
+
+		// equal
+		sortstest.SliceEqual10,
+		sortstest.SliceEqual20,
+
+		// increasing / decreasing
+		sortstest.SliceIncreasing10,
+		sortstest.SliceDecreasing10,
+
+		// any
+		sortstest.Slice1,
+		sortstest.Slice5,
+		sortstest.Slice10,
 	}
 
-	for title, testCases := range testMatrix {
-		for _, test := range testCases {
-			name := fmt.Sprintf("%s{%v}", title, test.slice)
+	for _, tc := range testCases {
+		var (
+			got  = make([]int, len(tc))
+			want = make([]int, len(tc))
+		)
 
-			t.Run(name, func(t *testing.T) {
-				copy(test.want, test.slice)
-				sort.Ints(test.want)
+		copy(got, tc)
+		copy(want, tc)
 
-				if sorts.Quick(test.slice); !reflect.DeepEqual(test.slice, test.want) {
-					t.Errorf("expected: %v, got: %v", test.want, test.slice)
-				}
-			})
-		}
+		sort.Ints(want)
+
+		name := fmt.Sprintf("%v", tc)
+		t.Run(name, func(t *testing.T) {
+			sorts.Quick(got)
+			if !cmp.Equal(got, want) {
+				t.Errorf("got %v, want %v", got, want)
+			}
+		})
 	}
 }
