@@ -39,48 +39,48 @@ func RomanToDecimal(roman string) int {
 	}
 
 	var (
-		max           int = M << 1
-		prev          int = M
-		decimal, accu int
+		max            int = M << 1
+		previous       int = M
+		decimal, accum int
 	)
 
-	for _, c := range roman {
-		curr, ok := toBit[c]
+	for _, r := range roman {
+		current, ok := toBit[r]
 
 		// Invalid cases: "A" / "3" / "$" / "VV" / "VIV" / "IXI" / "CMC"
-		if !ok || curr >= max {
+		if !ok || current >= max {
 			return -1
 		}
 
 		// Invalid cases: "IIX" / "CCM"
-		if accu == 2 && curr > prev {
+		if accum == 2 && current > previous {
 			return -1
 		}
 
 		// Invalid cases: "IIII" / "CCCC"
-		if curr == prev {
-			if accu++; accu > 3 {
+		if current == previous {
+			if accum++; accum > 3 {
 				return -1
 			}
 		} else {
-			accu = 1
+			accum = 1
 		}
 
-		if prev&(I|X|C) != 0 && curr > prev && curr <= (prev<<2) {
+		if previous&(I|X|C) != 0 && current > previous && current <= (previous<<2) {
 			// Cases: "IV" / "CM"
-			decimal += toDecimal[curr] - 2*toDecimal[prev]
+			decimal += toDecimal[current] - 2*toDecimal[previous]
 
-			max = prev
+			max = previous
 		} else {
 			// Case: "VI" / "CL"
-			decimal += toDecimal[curr]
+			decimal += toDecimal[current]
 
-			if curr&(V|L|D) != 0 {
-				max = curr
+			if current&(V|L|D) != 0 {
+				max = current
 			}
 		}
 
-		prev = curr
+		previous = current
 	}
 
 	return decimal
@@ -121,7 +121,7 @@ func DecimalToRoman(decimal int) string {
 		offset += 2
 	}
 
-	roman := []byte(b.String())
+	roman := []rune(b.String())
 
 	for i, j := 0, len(roman)-1; i < j; i, j = i+1, j-1 {
 		roman[i], roman[j] = roman[j], roman[i]
