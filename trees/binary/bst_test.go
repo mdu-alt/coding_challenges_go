@@ -47,7 +47,7 @@ func TestNewBST(t *testing.T) {
 		want  *Tree
 	}{
 		// empty
-		{[]int{}, &Tree{}},
+		{[]int{}, nil},
 
 		// left/right
 		{[]int{5, 4, 3, 2, 1}, bstLeft},
