@@ -11,23 +11,7 @@ import (
 )
 
 func TestMerge(t *testing.T) {
-	testCases := [][]int{
-		// empty
-		sortstest.Slice0,
-
-		// equal
-		sortstest.SliceEqual10,
-		sortstest.SliceEqual20,
-
-		// increasing / decreasing
-		sortstest.SliceIncreasing10,
-		sortstest.SliceDecreasing10,
-
-		// any
-		sortstest.Slice1,
-		sortstest.Slice5,
-		sortstest.Slice10,
-	}
+	testCases := sortstest.Slices
 
 	for _, tc := range testCases {
 		var (
@@ -40,10 +24,8 @@ func TestMerge(t *testing.T) {
 
 		sort.Ints(want)
 
-		name := fmt.Sprintf("%v", tc)
-		t.Run(name, func(t *testing.T) {
-			sorts.Merge(got)
-			if !cmp.Equal(got, want) {
+		t.Run(fmt.Sprintf("%v", tc), func(t *testing.T) {
+			if sorts.Merge(got); !cmp.Equal(got, want) {
 				t.Errorf("got %v, want %v", got, want)
 			}
 		})
