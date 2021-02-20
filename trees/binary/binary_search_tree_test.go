@@ -8,8 +8,8 @@ import (
 	. "github.com/mdu-alt/coding_challenges_go/trees/binary"
 )
 
-var (
-	bstLeft = &Tree{
+func TestNewBST(t *testing.T) {
+	bstLeft := &Tree{
 		Value: 5,
 		Left: &Tree{
 			Value: 4,
@@ -24,7 +24,7 @@ var (
 			},
 		},
 	}
-	bstRight = &Tree{
+	bstRight := &Tree{
 		Value: 1,
 		Right: &Tree{
 			Value: 2,
@@ -39,9 +39,6 @@ var (
 			},
 		},
 	}
-)
-
-func TestNewBST(t *testing.T) {
 	testCases := []struct {
 		slice []int
 		want  *Tree
