@@ -1,15 +1,15 @@
 package numbers
 
-// DigitalRoot repeatedly sums all digits of a positive integer n until a
-// single digit remains.
-// It returns -1 if n is negative.
+// DigitalRoot computes the digital root of n.
+//
+// The digital root of a positive integer is the recursive sum of its digits,
+// until a single digit remains.
+//
+//   Constraints:
+//       - n >= 0
 func DigitalRoot(n int) int {
-	if n < 0 {
-		return -1
-	}
-
-	for n/10 != 0 {
-		m := 0
+	for n > 9 {
+		var m int
 
 		for n != 0 {
 			m += n % 10

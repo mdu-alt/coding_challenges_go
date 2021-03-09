@@ -2,7 +2,6 @@ package numbers_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	"github.com/mdu-alt/coding_challenges_go/numbers"
@@ -20,15 +19,14 @@ func TestDigitalRoot(t *testing.T) {
 		n    int
 		want int
 	}{
-		// positive
 		{0, 0},
 		{5, 5},
-		{5642, 8},
-		{123456789, 9},
-
-		// negative
-		{-1, -1},
-		{math.MinInt32, -1},
+		{39, 3},
+		{871, 7},
+		{5_642, 8},
+		{93_201, 6},
+		{123_456_789, 9},
+		{2_147_483_647, 1}, // max int32
 	}
 
 	for _, tc := range testCases {
