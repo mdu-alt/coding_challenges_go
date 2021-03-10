@@ -86,46 +86,28 @@ func RomanToDecimal(roman string) int {
 	return decimal
 }
 
-// DecimalToRoman converts a decimal number to a string of roman numerals. It
-// returns an empty string if decimal is out of the range [1..3999].
+// DecimalToRoman converts a decimal number to a string of roman numerals.
+//
+//   Constraints:
+//       - 3999 >= decimal >= 1
 func DecimalToRoman(decimal int) string {
-	if decimal < 1 || decimal > 3999 {
-		return ""
+	symbols := []struct {
+		value   int
+		letters string
+	}{
+		{1000, "M"},
+		{900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"},
+		{90, "XC"}, {50, "L"}, {40, "XL"}, {10, "X"},
+		{9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"},
 	}
 
-	symbols := strings.Split("IVXLCDM", "")
+	var b strings.Builder
 
-	var (
-		offset int
-		b      strings.Builder
-	)
-
-	// Each iteration, the loop works on each digit of the number (starting
-	// from the unit) and a limited set of symbols is used each time: "IVX",
-	// "XLC" and "CDM".
-	for decimal != 0 {
-		digit := decimal % 10
-
-		switch {
-		case 0 < digit && digit < 4:
-			b.WriteString(strings.Repeat(symbols[offset], digit))
-		case digit == 4:
-			b.WriteString(symbols[offset+1] + symbols[offset])
-		case 4 < digit && digit < 9:
-			b.WriteString(strings.Repeat(symbols[offset], digit-5) + symbols[offset+1])
-		case digit == 9:
-			b.WriteString(symbols[offset+2] + symbols[offset])
-		}
-
-		decimal /= 10
-		offset += 2
+	for _, pair := range symbols {
+		quotient := decimal / pair.value
+		b.WriteString(strings.Repeat(pair.letters, quotient))
+		decimal -= pair.value * quotient
 	}
 
-	roman := []rune(b.String())
-
-	for i, j := 0, len(roman)-1; i < j; i, j = i+1, j-1 {
-		roman[i], roman[j] = roman[j], roman[i]
-	}
-
-	return string(roman)
+	return b.String()
 }

@@ -2,7 +2,6 @@ package numbers_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	"github.com/mdu-alt/coding_challenges_go/numbers"
@@ -67,19 +66,13 @@ func TestDecimalToRoman(t *testing.T) {
 		decimal int
 		want    string
 	}{
-		// valid
 		{1, "I"},
+		{10, "X"},
 		{176, "CLXXVI"},
 		{345, "CCCXLV"},
 		{2489, "MMCDLXXXIX"},
 		{3888, "MMMDCCCLXXXVIII"},
 		{3999, "MMMCMXCIX"},
-
-		// invalid
-		{math.MinInt32, ""},
-		{0, ""},
-		{4000, ""},
-		{math.MaxInt32, ""},
 	}
 
 	for _, tc := range testCases {
