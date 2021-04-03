@@ -10,22 +10,21 @@ import (
 
 func TestReverse(t *testing.T) {
 	testCases := []struct {
-		name string
 		list []int
 		want []int
 	}{
-		{"empty", nil, nil},
+		{nil, nil},
 
-		{"any", []int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}},
-		{"any", []int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}},
-		{"any", []int{3, 9, -2, 5, 0}, []int{0, 5, -2, 9, 3}},
+		{[]int{1}, []int{1}},
+		{[]int{1, 2, 3, 4, 5}, []int{5, 4, 3, 2, 1}},
+		{[]int{5, 4, 3, 2, 1, 0, -1, -2, -3, -4}, []int{-4, -3, -2, -1, 0, 1, 2, 3, 4, 5}},
 	}
 
 	for _, tc := range testCases {
 		list := singly.New(tc.list)
 		want := singly.New(tc.want)
 
-		t.Run(fmt.Sprintf("%s:%v", tc.name, tc.list), func(t *testing.T) {
+		t.Run(fmt.Sprintf("%v", tc.list), func(t *testing.T) {
 			if got := singly.Reverse(list); !cmp.Equal(got, want) {
 				t.Errorf("diff -got +want\n%v", cmp.Diff(got, want))
 			}
