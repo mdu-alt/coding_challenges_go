@@ -20,11 +20,9 @@ func New(slice []int) *Node {
 		curr = curr.Next
 	}
 
-	head = head.Next
-
-	if head != nil {
-		head.Prev = nil // remove dummy head
+	if head.Next != nil {
+		head.Next.Prev = nil // remove dummy head
 	}
 
-	return head
+	return head.Next
 }
