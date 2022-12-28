@@ -12,7 +12,7 @@ const (
 func TestPart1(t *testing.T) {
 	testCases := []struct {
 		filename string
-		want     uint
+		want     int
 	}{
 		{Example, 24000},
 		{PuzzleInput, 66186},
@@ -30,7 +30,7 @@ func TestPart1(t *testing.T) {
 func TestPart2(t *testing.T) {
 	testCases := []struct {
 		filename string
-		want     uint
+		want     int
 	}{
 		{Example, 45000},
 		{PuzzleInput, 196804},

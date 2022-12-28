@@ -11,20 +11,20 @@ import (
 	"strconv"
 )
 
-func part1(filename string) uint {
+func part1(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer file.Close()
 
-	var calories, maxCalories uint
+	var calories, maxCalories int
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if scanner.Text() != "" {
-			v, _ := strconv.ParseUint(scanner.Text(), 10, 32)
-			calories += uint(v)
+			v, _ := strconv.Atoi(scanner.Text())
+			calories += v
 		} else {
 			if calories > maxCalories {
 				maxCalories = calories
@@ -40,7 +40,7 @@ func part1(filename string) uint {
 	return maxCalories
 }
 
-func part2(filename string) uint {
+func part2(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
@@ -48,8 +48,8 @@ func part2(filename string) uint {
 	defer file.Close()
 
 	var (
-		calories    uint
-		topCalories = &maxHeap{}
+		calories, top3 int
+		topCalories    = new(MaxHeap)
 	)
 
 	heap.Init(topCalories)
@@ -57,8 +57,8 @@ func part2(filename string) uint {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if scanner.Text() != "" {
-			v, _ := strconv.ParseUint(scanner.Text(), 10, 64)
-			calories += uint(v)
+			v, _ := strconv.Atoi(scanner.Text())
+			calories += v
 		} else {
 			heap.Push(topCalories, calories)
 			calories = 0
@@ -67,25 +67,26 @@ func part2(filename string) uint {
 
 	heap.Push(topCalories, calories)
 
-	var top3 uint
 	for i := 0; i < 3; i++ {
-		top3 += heap.Pop(topCalories).(uint)
+		top3 += heap.Pop(topCalories).(int)
 	}
 
 	return top3
 }
 
-type maxHeap []uint
+// -----------------------------------------------------------------------------
 
-func (h maxHeap) Len() int           { return len(h) }
-func (h maxHeap) Less(i, j int) bool { return h[i] > h[j] }
-func (h maxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+type MaxHeap []int
 
-func (h *maxHeap) Push(x any) {
-	*h = append(*h, x.(uint))
+func (h MaxHeap) Len() int           { return len(h) }
+func (h MaxHeap) Less(i, j int) bool { return h[i] > h[j] }
+func (h MaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MaxHeap) Push(x any) {
+	*h = append(*h, x.(int))
 }
 
-func (h *maxHeap) Pop() any {
+func (h *MaxHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
